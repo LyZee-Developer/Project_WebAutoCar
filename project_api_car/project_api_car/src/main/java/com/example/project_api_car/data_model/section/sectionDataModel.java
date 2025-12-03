@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class sectionDataModel extends  IBaseDataModel{
+public class SectionDataModel extends  IBaseDataModel{
     public Long Id;
     @Size(max = 50, message = "Name cannot exceed 50 characters")
     public String Name;
