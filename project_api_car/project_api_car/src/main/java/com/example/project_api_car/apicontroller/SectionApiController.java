@@ -5,16 +5,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.project_api_car.controller.SectionController;
 import com.example.project_api_car.helper.SectionHelper;
 
-import lombok.AllArgsConstructor;
-
 @RestController
-@AllArgsConstructor
 public class SectionApiController {
+    private SectionController sectionDataModel;
+       
     @GetMapping("api/test/read")
     public ResponseEntity<?> TestController(){
-        return new ResponseEntity<>("hellow orld",HttpStatus.OK);
+        ResponseEntity<?> result = sectionDataModel.TestController();
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
     
     @GetMapping(SectionHelper.URL.List)
