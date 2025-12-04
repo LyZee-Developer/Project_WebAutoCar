@@ -12,5 +12,5 @@ public abstract class IBaseDto {
     private String Database;
     private String UpdatedBy;
     private Date UpdatedDate;
-    private Long RecordCount;
+    private int RecordCount;
 }

@@ -1,0 +1,12 @@
+package com.example.project_api_car.helper;
+
+public class GlobalHelper {
+    public static class Str {
+        public static final String GlobalDatabase = "_";
+        public static final String ADMIN = "ADMIN";
+    }
+    public static class Status {
+        public final String Success = "Success";
+        public final String Fail = "Fail";
+    }
+}

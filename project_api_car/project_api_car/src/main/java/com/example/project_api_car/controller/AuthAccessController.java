@@ -6,24 +6,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.example.project_api_car.data_model.user.UserDataModel;
-import com.example.project_api_car.data_model.user.UserFilterDataModel;
+import com.example.project_api_car.data_model.auth_access.AuthAccessDataModel;
+import com.example.project_api_car.data_model.auth_access.AuthAccessFilterDataModel;
 import com.example.project_api_car.helper.UserHelper;
+import com.example.project_api_car.implement_service.AuthAccessImplement;
 import com.example.project_api_car.implement_service.UserImplement;
-import com.example.project_api_car.repository.UserRepository;
+import com.example.project_api_car.repository.AuthAccessRepository;
 import com.example.project_api_car.security.ApiResponseHandler;
 
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @Service
-public class UserController {
+public class AuthAccessController {
+    private final AuthAccessImplement authAccessImplement;
+    private final AuthAccessRepository authAccessRepository;
     private final UserImplement userImplement;
-    private final UserRepository userRepository;
 
-    public ResponseEntity<?> List(UserFilterDataModel filter) {
+    public ResponseEntity<?> List(AuthAccessFilterDataModel filter) {
         try {
-            var result = userImplement.List(filter);
+            var result = authAccessImplement.List(filter);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             return new ResponseEntity<>(new ApiResponseHandler().SetDetail(e.getMessage()),
@@ -31,15 +33,15 @@ public class UserController {
         }
     }
 
-    public ResponseEntity<?> Create(UserDataModel model) {
+    public ResponseEntity<?> Create(AuthAccessDataModel model) {
         try {
-            
-            if (model.getUserCode().isEmpty()){
-                return new ResponseEntity<>(new ApiResponseHandler().SetDetail("The field usercode is required!"),HttpStatus.BAD_REQUEST);
+            if (Objects.isNull(model.getUserId()) || model.getUserId() < 1) {
+                return new ResponseEntity<>(new ApiResponseHandler().SetDetail("UserId is required!"),
+                        HttpStatus.BAD_REQUEST);
             }
-            var existedCode = userImplement.CheckCode(model.getUserCode(),0L);
-            if(existedCode) return new ResponseEntity<>(new ApiResponseHandler().SetDetail("UserCode already existed!"),HttpStatus.NOT_FOUND);
-            var result = userImplement.Create(model);
+            var existed = userImplement.IsExistedUserById(model.getId());
+            if(existed) return new ResponseEntity<>(new ApiResponseHandler().SetDetail("User not found"),HttpStatus.NOT_FOUND);
+            var result = authAccessImplement.Create(model);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             return new ResponseEntity<>(new ApiResponseHandler().SetDetail(e.getMessage()),
@@ -47,22 +49,22 @@ public class UserController {
         }
     }
 
-    public ResponseEntity<?> Update(UserDataModel model) {
+    public ResponseEntity<?> Update(AuthAccessDataModel model) {
         try {
             if (Objects.isNull(model.getId()) || model.getId() < 1) {
                 return new ResponseEntity<>(new ApiResponseHandler().SetDetail("Id is required!"),
                         HttpStatus.BAD_REQUEST);
             }
-            if (model.getUserCode().isEmpty()){
-                return new ResponseEntity<>(new ApiResponseHandler().SetDetail("The field usercode is required!"),
-                    HttpStatus.BAD_REQUEST);
+            if (Objects.isNull(model.getUserId()) || model.getUserId() < 1) {
+                return new ResponseEntity<>(new ApiResponseHandler().SetDetail("UserId is required!"),
+                        HttpStatus.BAD_REQUEST);
             }
-            var existedCode = userImplement.CheckCode(model.getUserCode(),model.getId());
-            if(existedCode) return new ResponseEntity<>(new ApiResponseHandler().SetDetail("UserCode already existed!"),HttpStatus.NOT_FOUND);
-            var isExisted = userRepository.findById(model.getId());
+            var existed = userImplement.IsExistedUserById(model.getId());
+            if(existed) return new ResponseEntity<>(new ApiResponseHandler().SetDetail("User not found"),HttpStatus.NOT_FOUND);
+            var isExisted = authAccessRepository.findById(model.getId());
             if (!isExisted.isPresent())
                 return new ApiResponseHandler().SetDetail(UserHelper.Message.NotFound, HttpStatus.NOT_FOUND);
-            var result = userImplement.Update(model);
+            var result = authAccessImplement.Update(model);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             return new ResponseEntity<>(new ApiResponseHandler().SetDetail(e.getMessage()),
@@ -73,16 +75,16 @@ public class UserController {
     public ResponseEntity<?> Delete(Long Id) {
         if (Id < 1)
             return new ApiResponseHandler().SetDetail("Id is required!", HttpStatus.BAD_REQUEST);
-        var isExisted = userRepository.findById(Id);
+        var isExisted = authAccessRepository.findById(Id);
         if (!isExisted.isPresent()) {
             return new ApiResponseHandler().SetDetail(UserHelper.Message.NotFound, HttpStatus.NOT_FOUND);
         }
-        var result = userImplement.Delete(Id);
+        var result = authAccessImplement.Delete(Id);
         return ResponseEntity.ok(result);
     }
 
     public ResponseEntity<?> CheckCode(String Code) {
-        var result = userImplement.CheckCode(Code,0L);
+        var result = authAccessImplement.CheckCode(Code,0L);
         return  ResponseEntity.ok(result);
     }
 }

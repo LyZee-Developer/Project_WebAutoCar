@@ -22,7 +22,7 @@ public class UserMapper {
         data.setDB_CODE(model.getDatabase());
         return data;
     }
-    public  static UserDto MaptoDto(DB_USER model,Long recordCount){
+    public  static UserDto MaptoDto(DB_USER model,int recordCount){
         var data = new UserDto();
         data.setId(model.getID());
         data.setName(model.getNAME());

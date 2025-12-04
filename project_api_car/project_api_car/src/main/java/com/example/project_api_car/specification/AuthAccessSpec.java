@@ -2,24 +2,20 @@ package com.example.project_api_car.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.example.project_api_car.entity.DB_USER;
+import com.example.project_api_car.entity.DB_AUTH_ACCESS;
 
-public class UserSpec {
-    public static Specification<DB_USER> Search(String search) {
+public class AuthAccessSpec {
+    public static Specification<DB_AUTH_ACCESS> Search(String search) {
         return (root, query, builder) -> {
             if(search==null) return builder.conjunction();
             return builder.or(
                 builder.like(root.get("DB_CODE"),"%"+search+"%"),
-                builder.like(root.get("NAME_EN"),"%"+search+"%"),
-                builder.like(root.get("NAME"),"%"+search+"%"),
-                builder.like(root.get("EMAIL"),"%"+search+"%"),
-                builder.like(root.get("USER_CODE"),"%"+search+"%"),
-                builder.like(root.get("PHONE"),"%"+search+"%"),
-                builder.like(root.get("PHONE1"),"%"+search+"%")
+                builder.like(root.get("TYPE"),"%"+search+"%"),
+                builder.like(root.get("USERNAME"),"%"+search+"%")
             );
         };
     }
-    public static Specification<DB_USER> OrderDir(String dir,String orderBy) {
+    public static Specification<DB_AUTH_ACCESS> OrderDir(String dir,String orderBy) {
         return (root, query, builder) -> {
             query.orderBy(builder.desc(root.get("id")));
             if(orderBy==null || orderBy.isEmpty()) return builder.conjunction();
@@ -29,7 +25,7 @@ public class UserSpec {
             return builder.conjunction();
         };
     }
-    public static Specification<DB_USER> SearchCode(String Code){
+    public static Specification<DB_AUTH_ACCESS> SearchCode(String Code){
         return (root,query,builder)->{
             if(Code.isEmpty()) return builder.conjunction();
             builder.equal(root.get("USER_CODE"), Code);

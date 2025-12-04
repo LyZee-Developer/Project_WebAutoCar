@@ -26,14 +26,15 @@ public class UserImplement implements  UserService {
             list = list.stream().skip(filter.getPage()-1).limit(filter.getRecord()*filter.getPage()).collect(Collectors.toList());
         }
         if(filter.getId() != null && filter.getId()>0) list = list.stream().filter(s->s.getID().equals(filter.getId())).collect(Collectors.toList());
-        return list.stream().map(s->UserMapper.MaptoDto(s,10L)).collect(Collectors.toList());
+        var total = list.size();
+        return list.stream().map(s->UserMapper.MaptoDto(s,total)).collect(Collectors.toList());
     }
 
     @Override
     public  UserDto  Create(UserDataModel model){
         var mapData = UserMapper.MaptoEntity(model);
         var data = userRepository.save(mapData);
-        var result = UserMapper.MaptoDto(data,1L);
+        var result = UserMapper.MaptoDto(data,1);
         return result;
     }
 
@@ -50,7 +51,7 @@ public class UserImplement implements  UserService {
         data.setEMAIL(model.getEmail());
         data.setUPDATED_DATE(new Date());
         userRepository.save(data);
-        var result = UserMapper.MaptoDto(data,1L);
+        var result = UserMapper.MaptoDto(data,1);
         return result;
     }
 
@@ -59,10 +60,21 @@ public class UserImplement implements  UserService {
         userRepository.deleteById(Id);
         return true;
     }
+
     @Override
     public Boolean CheckCode(String code,Long Id){
-        userRepository.deleteById(Id);
-        return true;
+        var codes = userRepository.findAll().stream().filter(s->s.getUSER_CODE().equals(code)).collect(Collectors.toList());
+        if(Id>0){
+            var lists = codes.stream().filter(s->!s.getID().equals(Id)).collect(Collectors.toList());
+            return !lists.isEmpty();
+        } 
+        return  !codes.isEmpty();
+    }
+
+    @Override
+    public Boolean IsExistedUserById(Long Id){
+        var users = userRepository.findAll().stream().filter(s->s.getID().equals(Id)).collect(Collectors.toList());
+        return  users.isEmpty();
     }
     
 }

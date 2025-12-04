@@ -15,4 +15,5 @@ public interface UserService {
     UserDto Update(UserDataModel model);
     Boolean CheckCode(String code,Long Id);
     Boolean Delete(Long Id);
+    Boolean IsExistedUserById(Long Id);
 }
