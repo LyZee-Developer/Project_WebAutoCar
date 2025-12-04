@@ -20,7 +20,7 @@ import lombok.AllArgsConstructor;
 @Validated
 @AllArgsConstructor
 public class SectionApiController {
-    private SectionController sectionDataModel;
+    private final SectionController sectionDataModel;
        
     @GetMapping("api/test/read")
     public ResponseEntity<?> TestController(){
@@ -45,12 +45,7 @@ public class SectionApiController {
         ResponseEntity<?> result = sectionDataModel.Update(model);
         return result;
     }
-
-    // @GetMapping(SectionHelper.URL.Delete+"/{id}")
-    // public ResponseEntity<?> Delete(@PathVariable("id")  Long Id){
-    //     var result = sectionDataModel.Delete(Id);
-    //     return new ResponseEntity<>(result,HttpStatus.OK);
-    // }
+    
     @GetMapping(SectionHelper.URL.Delete)
     public ResponseEntity<?> Delete(@RequestParam(value="id")  Long Id){
         var result = sectionDataModel.Delete(Id);
