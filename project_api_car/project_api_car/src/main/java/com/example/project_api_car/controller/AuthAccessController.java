@@ -1,6 +1,7 @@
 package com.example.project_api_car.controller;
 
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.project_api_car.data_model.auth_access.AuthAccessDataModel;
 import com.example.project_api_car.data_model.auth_access.AuthAccessFilterDataModel;
+import com.example.project_api_car.helper.AuthAccessHelper;
 import com.example.project_api_car.helper.UserHelper;
 import com.example.project_api_car.implement_service.AuthAccessImplement;
 import com.example.project_api_car.implement_service.UserImplement;
@@ -39,8 +41,17 @@ public class AuthAccessController {
                 return new ResponseEntity<>(new ApiResponseHandler().SetDetail("UserId is required!"),
                         HttpStatus.BAD_REQUEST);
             }
-            var existed = userImplement.IsExistedUserById(model.getId());
+            var checkType = AuthAccessHelper.Type.Type.contains(model.getType());
+            if(!checkType) return new ResponseEntity<>(new ApiResponseHandler().SetDetail("Invalid type A(Admin) O(Other))!"),HttpStatus.BAD_REQUEST);
+             var ListType = authAccessRepository.findAll().stream().filter(s ->s.getTYPE().trim().equals(model.getType()) && s.getSTATUS() && s.getUSER_ID().longValue()==model.getUserId()).collect(Collectors.toList());
+            if(!ListType.isEmpty()){
+                 return new ResponseEntity<>(new ApiResponseHandler().SetDetail("This user have already type"+(model.getType().trim().equals("A")?"(Admin)":"(Other)")),HttpStatus.BAD_REQUEST);
+            }
+            var existed = userImplement.IsExistedUserById(model.getUserId());
             if(existed) return new ResponseEntity<>(new ApiResponseHandler().SetDetail("User not found"),HttpStatus.NOT_FOUND);
+            var existedName = authAccessImplement.CheckUsername(model.getUserName(),0L);
+            if(existedName) return new ResponseEntity<>(new ApiResponseHandler().SetDetail("Username have already!"),HttpStatus.NOT_FOUND);
+           
             var result = authAccessImplement.Create(model);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
@@ -59,8 +70,14 @@ public class AuthAccessController {
                 return new ResponseEntity<>(new ApiResponseHandler().SetDetail("UserId is required!"),
                         HttpStatus.BAD_REQUEST);
             }
-            var existed = userImplement.IsExistedUserById(model.getId());
+            var checkType = AuthAccessHelper.Type.Type.contains(model.getType());
+            if(!checkType) return new ResponseEntity<>(new ApiResponseHandler().SetDetail("Invalid type A(Admin) O(Other))!"),HttpStatus.BAD_REQUEST);
+            var existed = userImplement.IsExistedUserById(model.getUserId());
             if(existed) return new ResponseEntity<>(new ApiResponseHandler().SetDetail("User not found"),HttpStatus.NOT_FOUND);
+            var existedName = authAccessImplement.CheckUsername(model.getUserName(),model.getId());
+            if(existedName) {
+                return new ResponseEntity<>(new ApiResponseHandler().SetDetail("Username have already!"),HttpStatus.NOT_FOUND);
+            }
             var isExisted = authAccessRepository.findById(model.getId());
             if (!isExisted.isPresent())
                 return new ApiResponseHandler().SetDetail(UserHelper.Message.NotFound, HttpStatus.NOT_FOUND);
@@ -77,14 +94,17 @@ public class AuthAccessController {
             return new ApiResponseHandler().SetDetail("Id is required!", HttpStatus.BAD_REQUEST);
         var isExisted = authAccessRepository.findById(Id);
         if (!isExisted.isPresent()) {
-            return new ApiResponseHandler().SetDetail(UserHelper.Message.NotFound, HttpStatus.NOT_FOUND);
+            return new ApiResponseHandler().SetDetail(AuthAccessHelper.Message.NotFound, HttpStatus.NOT_FOUND);
         }
         var result = authAccessImplement.Delete(Id);
         return ResponseEntity.ok(result);
     }
 
-    public ResponseEntity<?> CheckCode(String Code) {
-        var result = authAccessImplement.CheckCode(Code,0L);
+    public ResponseEntity<?> IsLoginSuccess(String username,String password) {
+        if (username.trim().isEmpty() || password.trim().isEmpty()) {
+            return new ApiResponseHandler().SetDetail(AuthAccessHelper.Message.RequiredUserPw, HttpStatus.NOT_FOUND);
+        }
+        var result = authAccessImplement.IsLoginSuccess(username,password);
         return  ResponseEntity.ok(result);
     }
 }

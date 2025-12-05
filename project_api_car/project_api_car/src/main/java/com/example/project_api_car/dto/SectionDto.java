@@ -9,6 +9,7 @@ public class SectionDto {
     public Long  Id;
     private String Name;
     private String EnglishName;
+    private Boolean Status;
     private String CreatedBy;
     private Date CreatedDate;
     private String Database;

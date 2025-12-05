@@ -32,4 +32,10 @@ public class AuthAccessSpec {
             return builder.conjunction();
         };
     }
+    public static Specification<DB_AUTH_ACCESS> FilterStatus(Boolean status){
+        return (root,query,builder)->{
+            builder.equal(root.get("STATUS"), status);
+            return builder.conjunction();
+        };
+    }
 }

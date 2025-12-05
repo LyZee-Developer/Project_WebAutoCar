@@ -22,5 +22,6 @@ public class UserDataModel extends  IBaseDataModel{
     public String Email;
      @Size(max = 20, message = "UserCode cannot exceed 20 characters")
     public String UserCode;
-    public Boolean GENDER;
+    public Boolean Gender;
+    public Boolean Status;
 }

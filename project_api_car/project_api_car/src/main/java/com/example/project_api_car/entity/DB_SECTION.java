@@ -20,6 +20,8 @@ public class DB_SECTION {
     private String NAME;
     @Column(length=50,name="NAME_EN")
     private String NAME_EN;
+    @Column(nullable = false)
+    private Boolean STATUS;
     @Column(length=100,name="CREATED_BY",nullable = false)
     private String CREATED_BY;
     @Column(name="CREATED_DATE",nullable = false )

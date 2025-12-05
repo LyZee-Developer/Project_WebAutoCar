@@ -10,6 +10,7 @@ public class UserDto extends IBaseDto {
     private String Email;
     private String Phone;
     private String Code;
+    private Boolean Status;
     private String Phone1;
     private Boolean Gender;
 }

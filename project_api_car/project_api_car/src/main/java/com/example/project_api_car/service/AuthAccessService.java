@@ -13,6 +13,7 @@ public interface AuthAccessService {
     List<AuthAccessDto> List(AuthAccessFilterDataModel filter);
     AuthAccessDto Create(AuthAccessDataModel model);
     AuthAccessDto Update(AuthAccessDataModel model);
-    Boolean CheckCode(String code,Long Id);
+    Boolean IsLoginSuccess(String username,String password);
     Boolean Delete(Long Id);
+    Boolean CheckUsername(String name,Long Id);
 }

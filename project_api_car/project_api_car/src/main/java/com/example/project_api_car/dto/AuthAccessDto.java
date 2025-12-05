@@ -9,4 +9,5 @@ public class AuthAccessDto extends IBaseDto {
     private String Username;
     private String Password;
     private String Type;
+    private Boolean Status;
 }

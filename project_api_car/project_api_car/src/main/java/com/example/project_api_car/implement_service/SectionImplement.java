@@ -43,6 +43,7 @@ public class SectionImplement implements  SectionService {
         data.setNAME(model.getName());
         data.setNAME_EN(model.getEnglishName());
         data.setUPDATED_BY(model.getUsername());
+        data.setSTATUS(model.getStatus());
         data.setUPDATED_DATE(new Date());
         data.setDB_CODE(model.getDatabase());
         sectionRepository.save(data);

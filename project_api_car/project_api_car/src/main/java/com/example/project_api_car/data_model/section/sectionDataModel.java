@@ -14,4 +14,5 @@ public class SectionDataModel extends  IBaseDataModel{
     public String Name;
     @Size(max = 50, message = "Name cannot exceed 50 characters")
     public String EnglishName;
+    public Boolean Status;
 }

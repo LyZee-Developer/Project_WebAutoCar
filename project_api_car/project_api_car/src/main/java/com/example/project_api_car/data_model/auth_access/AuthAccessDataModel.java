@@ -17,4 +17,5 @@ public class AuthAccessDataModel extends  IBaseDataModel{
     private String UserName;
     @Size(max = 500, message = "Password cannot exceed 500 characters")
     private String Password;
+    private Boolean Status;
 }

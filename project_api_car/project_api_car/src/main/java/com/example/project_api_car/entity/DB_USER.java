@@ -26,7 +26,10 @@ public class DB_USER {
     private String PHONE1;
     @Column(length=100)
     private String EMAIL;
+    @Column(nullable = false)
     private Boolean GENDER;
+    @Column(nullable = false)
+    private Boolean STATUS;
     @Column(length=20,nullable=false)
     private String USER_CODE;
     @Column(length=100,name="CREATED_BY",nullable = false)

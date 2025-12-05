@@ -12,6 +12,7 @@ public class SectionMapper {
         var data = new DB_SECTION();
         data.setNAME(model.getName());
         data.setNAME_EN(model.getEnglishName());
+        data.setSTATUS(model.getStatus());
         data.setCREATED_BY(model.getUsername());
         data.setCREATED_DATE(new Date());
         data.setDB_CODE(model.getDatabase());
@@ -21,6 +22,7 @@ public class SectionMapper {
         var data = new SectionDto();
         data.setId(model.getID());
         data.setName(model.getNAME());
+        data.setStatus(model.getSTATUS());
         data.setEnglishName(model.getNAME_EN());
         data.setCreatedBy(model.getCREATED_BY());
         data.setCreatedDate(model.getCREATED_DATE());

@@ -4,11 +4,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.project_api_car.data_model.auth_access.AuthAccessDataModel;
 import com.example.project_api_car.data_model.auth_access.AuthAccessFilterDataModel;
 import com.example.project_api_car.dto.AuthAccessDto;
+import com.example.project_api_car.helper.GlobalHelper;
 import com.example.project_api_car.mapper.AuthAccessMapper;
 import com.example.project_api_car.repository.AuthAccessRepository;
 import com.example.project_api_car.service.AuthAccessService;
@@ -19,6 +21,7 @@ import lombok.AllArgsConstructor;
 @Service
 public class AuthAccessImplement implements  AuthAccessService {
     private final AuthAccessRepository  authAccessRepository;
+    private final PasswordEncoder passwordEncoder;
     @Override
     public List<AuthAccessDto> List(AuthAccessFilterDataModel filter){
         var list = authAccessRepository.findAll(AuthAccessSpec.Search(filter.getSearch()).and(AuthAccessSpec.OrderDir(filter.getOrderDir(),filter.getOrderBy())));
@@ -26,26 +29,38 @@ public class AuthAccessImplement implements  AuthAccessService {
             list = list.stream().skip(filter.getPage()-1).limit(filter.getRecord()*filter.getPage()).collect(Collectors.toList());
         }
         if(filter.getId() != null && filter.getId()>0) list = list.stream().filter(s->s.getID().equals(filter.getId())).collect(Collectors.toList());
+        if (filter.getStatus() != null) {
+                list = list.stream()
+                        .filter(s -> s.getSTATUS().equals(filter.getStatus()))
+                        .collect(Collectors.toList());
+        }
         var total = list.size();
         return list.stream().map(s->AuthAccessMapper.MaptoDto(s,total)).collect(Collectors.toList());
     }
 
     @Override
     public  AuthAccessDto  Create(AuthAccessDataModel model){
+        String hashedPassword = passwordEncoder.encode(model.getPassword());
+        model.setPassword(hashedPassword);
         var mapData = AuthAccessMapper.MaptoEntity(model);
         var data = authAccessRepository.save(mapData);
         var result = AuthAccessMapper.MaptoDto(data,1);
         return result;
     }
+     // In an authentication scenario, Spring Security will automatically call this:
+    // boolean isMatch = passwordEncoder.matches(rawPasswordAttempt, storedHashedPassword);
+    // The matches method handles the salting and hashing internally.
 
     @Override
     public AuthAccessDto Update(AuthAccessDataModel model){
         var data = authAccessRepository.findById(model.getId()).get();
-        data.setPASSWORD(model.getPassword());
+        String hashedPassword = passwordEncoder.encode(model.getPassword());
+        data.setPASSWORD(hashedPassword);
         data.setUSER_ID(model.getUserId());
         data.setUSERNAME(model.getUserName());
-        data.setTYPE(model.getType());
+        data.setSTATUS(model.getStatus());
         data.setUPDATED_DATE(new Date());
+        data.setUPDATED_BY(GlobalHelper.Str.ADMIN);
         authAccessRepository.save(data);
         var result = AuthAccessMapper.MaptoDto(data,1);
         return result;
@@ -58,13 +73,21 @@ public class AuthAccessImplement implements  AuthAccessService {
     }
 
     @Override
-    public Boolean CheckCode(String code,Long Id){
-        // var codes = authAccessRepository.findAll().stream().filter(s->s.getUSER_CODE().equals(code)).collect(Collectors.toList());
-        // if(Id>0){
-        //     var lists = codes.stream().filter(s->!s.getID().equals(Id)).collect(Collectors.toList());
-        //     return !lists.isEmpty();
-        // } 
-        return  true;
+    public Boolean IsLoginSuccess(String username,String password){
+        var usernameLog = authAccessRepository.findAll().stream().filter(s->s.getUSERNAME().equals(username)).findFirst();
+        if(usernameLog.isEmpty()) return false;
+        var user = usernameLog.get();
+        boolean isMatch = passwordEncoder.matches(password, user.getPASSWORD());
+        return  isMatch;
+    }
+
+    @Override
+    public Boolean CheckUsername(String name,Long Id){
+        var isExisted = authAccessRepository.findAll().stream().filter(s->s.getUSERNAME().equals(name)).collect(Collectors.toList());
+        if(Id>0){
+            isExisted = isExisted.stream().filter(s->!s.getID().equals(Id)).collect(Collectors.toList());
+        }
+        return  !isExisted.isEmpty();
     }
     
 }

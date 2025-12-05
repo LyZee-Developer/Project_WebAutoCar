@@ -24,6 +24,8 @@ public class DB_AUTH_ACCESS {
     private String USERNAME;
     @Column(length=500,nullable = false)
     private String PASSWORD;
+    @Column(nullable = false)
+    private Boolean STATUS;
     @Column(length=100,name="CREATED_BY",nullable = false)
     private String CREATED_BY;
     @Column(name="CREATED_DATE",nullable = false )

@@ -44,7 +44,8 @@ public class UserImplement implements  UserService {
         data.setNAME(model.getName());
         data.setNAME_EN(model.getEnglishName());
         data.setUPDATED_BY(model.getUsername());
-        data.setGENDER(model.getGENDER());
+        data.setGENDER(model.getGender());
+        data.setSTATUS(model.getStatus());
         data.setPHONE(model.getPhone());
         data.setPHONE1(model.getPhone1());
         data.setUSER_CODE(model.getUserCode());
