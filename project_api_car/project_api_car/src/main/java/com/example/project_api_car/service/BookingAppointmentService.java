@@ -14,5 +14,6 @@ public interface BookingAppointmentService {
     BookingAppointmentDto Create(BookingAppointmentDataModel model);
     BookingAppointmentDto Update(BookingAppointmentDataModel model);
     Boolean Delete(Long Id);
+    String ChangeStatus(Long Id,Boolean status);
     Boolean IsExistedUserById(Long Id);
 }

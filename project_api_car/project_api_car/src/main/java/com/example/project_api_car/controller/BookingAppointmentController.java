@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.project_api_car.data_model.booking_appointment.BookingAppointmentDataModel;
 import com.example.project_api_car.data_model.booking_appointment.BookingAppointmentFilterDataModel;
+import com.example.project_api_car.helper.BookingAppointmentHelper;
 import com.example.project_api_car.helper.UserHelper;
 import com.example.project_api_car.implement_service.BookingAppointmentImplement;
+import com.example.project_api_car.implement_service.CarImplement;
+import com.example.project_api_car.implement_service.ServiceTypeImplement;
 import com.example.project_api_car.repository.BookingAppointmentRepository;
 import com.example.project_api_car.security.ApiResponseHandler;
 
@@ -20,6 +23,8 @@ import lombok.AllArgsConstructor;
 public class BookingAppointmentController {
     private final BookingAppointmentImplement bookingAppointmentImplement;
     private final BookingAppointmentRepository bookingAppointmentRepository;
+    private final CarImplement carImplement;
+    private final ServiceTypeImplement serviceTypeImplement;
 
     public ResponseEntity<?> List(BookingAppointmentFilterDataModel filter) {
         try {
@@ -34,15 +39,14 @@ public class BookingAppointmentController {
     public ResponseEntity<?> Create(BookingAppointmentDataModel model) {
         try {
             
-             if (model.getServiceId()<1){
-                return new ResponseEntity<>(new ApiResponseHandler().SetDetail("The field ServiceId is required!"),
+            if(!serviceTypeImplement.IsExistService(model.getServiceId())) {
+                return new ResponseEntity<>(new ApiResponseHandler().SetDetail("Service was not found!"),
                     HttpStatus.BAD_REQUEST);
-            }
-            if (model.getCarId()<1){
-                return new ResponseEntity<>(new ApiResponseHandler().SetDetail("The field CardId is required!"),
+            } 
+            if(!carImplement.IsExistedCar(model.getCarId())) {
+                return new ResponseEntity<>(new ApiResponseHandler().SetDetail("Car was not found!"),
                     HttpStatus.BAD_REQUEST);
-            }
-
+            } 
             var result = bookingAppointmentImplement.Create(model);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
@@ -57,19 +61,19 @@ public class BookingAppointmentController {
                 return new ResponseEntity<>(new ApiResponseHandler().SetDetail("Id is required!"),
                         HttpStatus.BAD_REQUEST);
             }
-            if (model.getServiceId()<1){
-                return new ResponseEntity<>(new ApiResponseHandler().SetDetail("The field ServiceId is required!"),
+            
+            if(!serviceTypeImplement.IsExistService(model.getServiceId())) {
+                return new ResponseEntity<>(new ApiResponseHandler().SetDetail("Service was not found!"),
                     HttpStatus.BAD_REQUEST);
-            }
-            if (model.getCarId()<1){
-                return new ResponseEntity<>(new ApiResponseHandler().SetDetail("The field CardId is required!"),
+            } 
+            if(!carImplement.IsExistedCar(model.getCarId())) {
+                return new ResponseEntity<>(new ApiResponseHandler().SetDetail("Car was not found!"),
                     HttpStatus.BAD_REQUEST);
-            }
-            // var existedCode = bookingAppointmentImplement.CheckCode(model.getUserCode(),model.getId());
-            // if(existedCode) return new ResponseEntity<>(new ApiResponseHandler().SetDetail("UserCode already existed!"),HttpStatus.NOT_FOUND);
+            } 
             var isExisted = bookingAppointmentRepository.findById(model.getId());
-            if (!isExisted.isPresent())
+            if (!isExisted.isPresent()){
                 return new ApiResponseHandler().SetDetail(UserHelper.Message.NotFound, HttpStatus.NOT_FOUND);
+            }
             var result = bookingAppointmentImplement.Update(model);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
@@ -83,10 +87,22 @@ public class BookingAppointmentController {
             return new ApiResponseHandler().SetDetail("Id is required!", HttpStatus.BAD_REQUEST);
         var isExisted = bookingAppointmentRepository.findById(Id);
         if (!isExisted.isPresent()) {
-            return new ApiResponseHandler().SetDetail(UserHelper.Message.NotFound, HttpStatus.NOT_FOUND);
+            return new ApiResponseHandler().SetDetail(BookingAppointmentHelper.Message.NotFound, HttpStatus.NOT_FOUND);
         }
         var result = bookingAppointmentImplement.Delete(Id);
         return ResponseEntity.ok(result);
+    }
+
+    public ResponseEntity<?> ChangeStatus(Long id,Boolean status) {
+        var isExisted = bookingAppointmentRepository.findById(id);
+        if (!isExisted.isPresent()) {
+            return new ApiResponseHandler().SetDetail(BookingAppointmentHelper.Message.NotFound, HttpStatus.NOT_FOUND);
+        }
+        if(isExisted.get().getIS_COMPLETE().booleanValue()==status){
+             return new ResponseEntity<>(new ApiResponseHandler().SetDetail("Current your status have change already!"),HttpStatus.BAD_REQUEST); 
+        }
+        var result = bookingAppointmentImplement.ChangeStatus(id,status);
+        return ResponseEntity.ok(new ApiResponseHandler().SetSuccess(result));
     }
 
 }

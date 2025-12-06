@@ -14,4 +14,5 @@ public interface ServiceTypeService {
     ServiceTypeDto Create(ServiceTypeDataModel model);
     ServiceTypeDto Update(ServiceTypeDataModel model);
     Boolean Delete(Long Id);
+    Boolean IsExistService(Long Id);
 }

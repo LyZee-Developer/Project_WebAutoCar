@@ -16,7 +16,7 @@ public class BookingAppointmentMapper {
         data.setPHONE(model.getPhone());
         data.setPROBLEM(model.getProblem());
         data.setSERVICE_ID(model.getServiceId());
-        data.setIS_COMPLETE(model.getIsComplete());
+        data.setIS_COMPLETE(false);
         data.setYEAR(model.getYear());
         data.setCAR_ID(model.getCarId());
         data.setCREATED_BY(GlobalHelper.Str.ADMIN);

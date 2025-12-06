@@ -14,4 +14,5 @@ public interface SectionService {
     SectionDto Create(SectionDataModel model);
     SectionDto Update(SectionDataModel model);
     Boolean Delete(Long Id);
+    
 }

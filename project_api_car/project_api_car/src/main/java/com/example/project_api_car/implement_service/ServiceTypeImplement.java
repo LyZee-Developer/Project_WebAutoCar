@@ -64,5 +64,10 @@ public class ServiceTypeImplement implements  ServiceTypeService {
         serviceTypeRepository.deleteById(Id);
         return true;
     }
+     @Override
+    public Boolean IsExistService(Long Id){
+        var service = serviceTypeRepository.findById(Id);
+        return service.isPresent();
+    }
     
 }

@@ -10,12 +10,9 @@ public class BookingAppointmentSpec{
             if(search==null) return builder.conjunction();
             return builder.or(
                 builder.like(root.get("DB_CODE"),"%"+search+"%"),
-                builder.like(root.get("NAME_EN"),"%"+search+"%"),
-                builder.like(root.get("NAME"),"%"+search+"%"),
+                builder.like(root.get("FULL_NAME"),"%"+search+"%"),
                 builder.like(root.get("EMAIL"),"%"+search+"%"),
-                builder.like(root.get("USER_CODE"),"%"+search+"%"),
-                builder.like(root.get("PHONE"),"%"+search+"%"),
-                builder.like(root.get("PHONE1"),"%"+search+"%")
+                builder.like(root.get("PHONE"),"%"+search+"%")
             );
         };
     }

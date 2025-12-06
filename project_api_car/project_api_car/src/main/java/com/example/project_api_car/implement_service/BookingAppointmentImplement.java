@@ -23,6 +23,7 @@ public class BookingAppointmentImplement implements  BookingAppointmentService {
     @Override
     public List<BookingAppointmentDto> List(BookingAppointmentFilterDataModel filter){
         var list = bookingAppointmentRepository.findAll(BookingAppointmentSpec.Search(filter.getSearch()).and(BookingAppointmentSpec.OrderDir(filter.getOrderDir(),filter.getOrderBy())));
+        // var list = bookingAppointmentRepository.GetListByJoin();
         if(filter.getId() != null && filter.getId()>0) list = list.stream().filter(s->s.getID().equals(filter.getId())).collect(Collectors.toList());
          if (filter.getIsComplete() != null) {
                 list = list.stream()
@@ -72,6 +73,17 @@ public class BookingAppointmentImplement implements  BookingAppointmentService {
     public Boolean IsExistedUserById(Long Id){
         var users = bookingAppointmentRepository.findAll().stream().filter(s->s.getID().equals(Id)).collect(Collectors.toList());
         return  users.isEmpty();
+    }
+
+    @Override
+    public String ChangeStatus(Long Id,Boolean status){
+        var getBook = bookingAppointmentRepository.findById(Id);
+        var book = getBook.get();
+        book.setIS_COMPLETE(status);
+        book.setUPDATED_BY(GlobalHelper.Str.ADMIN);
+        book.setUPDATED_DATE(new Date());
+        bookingAppointmentRepository.save(book);
+        return  "Change status already";
     }
     
 }

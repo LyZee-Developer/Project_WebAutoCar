@@ -14,4 +14,5 @@ public interface CarService {
     CarDto Create(CarDataModel model);
     CarDto Update(CarDataModel model);
     Boolean Delete(Long Id);
+    Boolean IsExistedCar(Long CarId);
 }

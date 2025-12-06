@@ -14,20 +14,22 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder(); 
-    }
-    
      @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()  // Allow all requests without authentication
+                        .anyRequest().permitAll()
                 )
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for development (enable in production if needed)
-                .formLogin(form -> form.disable()) // Disable default login form
-                .httpBasic(httpBasic -> httpBasic.disable()); // Disable basic authentication
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable());
 
         return http.build();
     }
@@ -35,13 +37,56 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // configuration.addAllowedOrigin("http://localhost:8090");
+
+        configuration.addAllowedOriginPattern("*");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+
         return source;
     }
+    // @Bean
+    // public PasswordEncoder passwordEncoder(){
+    //     return new BCryptPasswordEncoder(); 
+    // }
+
+    // @Bean
+    // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+    //     http
+    //             .csrf(csrf -> csrf.disable())
+    //             .authorizeHttpRequests(auth -> auth
+    //                     .anyRequest().permitAll()
+    //             );
+
+    //     return http.build();
+    // }
+    // @Bean
+    // public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    //     http
+    //             .authorizeHttpRequests(auth -> auth
+    //                     .anyRequest().permitAll()  // Allow all requests without authentication
+    //             )
+    //             .csrf(csrf -> csrf.disable()) // Disable CSRF for development (enable in production if needed)
+    //             .formLogin(form -> form.disable()) // Disable default login form
+    //             .httpBasic(httpBasic -> httpBasic.disable()); // Disable basic authentication
+
+    //     return http.build();
+    // }
+
+    // @Bean
+    // public CorsConfigurationSource corsConfigurationSource() {
+    //     CorsConfiguration configuration = new CorsConfiguration();
+    //     // configuration.addAllowedOrigin("http://localhost:8090");
+    //     configuration.addAllowedMethod("*");
+    //     configuration.addAllowedHeader("*");
+    //     configuration.setAllowCredentials(true);
+
+    //     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    //     source.registerCorsConfiguration("/**", configuration);
+    //     return source;
+    // }
 }

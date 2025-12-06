@@ -65,4 +65,10 @@ public class CarImplement implements  CarService {
         return true;
     }
     
+    @Override
+    public Boolean IsExistedCar(Long CarId){
+        var getCar = carRepository.findById(CarId);
+        return getCar.isPresent();
+    }
+    
 }

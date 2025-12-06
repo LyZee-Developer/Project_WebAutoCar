@@ -26,6 +26,7 @@ public class ApiResponseHandler {
         this.Message = Message;
         return this;
     }
+    
     public  ApiResponseHandler SetSuccess(String message){
         this.Status = true;
         this.IsSuccess = true;

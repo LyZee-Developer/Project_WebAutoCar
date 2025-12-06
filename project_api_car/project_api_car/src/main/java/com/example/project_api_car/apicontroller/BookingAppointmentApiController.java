@@ -44,5 +44,10 @@ public class BookingAppointmentApiController {
         var result = bookingAppointmentController.Delete(Id);
         return new ResponseEntity<>(result.getBody(),result.getStatusCode());
     }
+    @GetMapping(BookingAppointmentHelper.URL.ChangeStatus)
+    public ResponseEntity<?> ChangeStatus(@RequestParam(value="Id") Long Id,@RequestParam(value="Status") Boolean status){
+        var result = bookingAppointmentController.ChangeStatus(Id,status);
+        return new ResponseEntity<>(result.getBody(),result.getStatusCode());
+    }
    
 }
