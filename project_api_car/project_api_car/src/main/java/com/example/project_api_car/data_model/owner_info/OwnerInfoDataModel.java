@@ -12,7 +12,19 @@ public class OwnerInfoDataModel extends  IBaseDataModel{
     public Long Id;
     @Size(max = 50, message = "Name cannot exceed 50 characters")
     public String Name;
-    @Size(max = 50, message = "Name cannot exceed 50 characters")
+    @Size(max = 50, message = "EnglishName cannot exceed 50 characters")
     public String EnglishName;
-    public Boolean Status;
+    @Size(max = 15, message = "Phone cannot exceed 15 characters")
+    private String Phone;
+    @Size(max = 15, message = "Phone1 cannot exceed 15 characters")
+    private String Phone1;
+    private String Email;
+    private String Description;
+    private String FacebookURL;
+    private String InstagramURL;
+    private String InURL;
+    private String YoutubeURL;
+    private String TelegramURL;
+    @Size(max = 255, message = "WorkingInfo cannot exceed 255 characters")
+    private String WorkingInfo;
 }

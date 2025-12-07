@@ -9,31 +9,19 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
-
+@Entity
 @Setter
 @Getter
-@Entity
-public class DB_OWNER_INFO {
+public class DB_PARTNER_SUPPORT{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ID;
-    @Column(length=50,nullable=false)
+    public Long  ID;
+    @Column(length=100,name="NAME")
     private String NAME;
-    @Column(length=50,nullable=false)
+    @Column(length=100,name="NAME_EN")
     private String NAME_EN;
-    @Column(length=15,nullable=false)
-    private String PHONE;
-    @Column(length=15,nullable=true)
-    private String PHONE1;
-    @Column(length=255)
-    private String EMAIL;
-    private String DESCRIPTION;
-    private String FACEBOOK_URL;
-    private String IN_URL;
-    private String INSTAGRAM_URL;
-    private String YOUTUBE_URL;
-    private String TELEGRAM_URL;
-    private String WORKING_INFO;
+    @Column(nullable = false)
+    private Boolean STATUS;
     @Column(length=100,name="CREATED_BY",nullable = false)
     private String CREATED_BY;
     @Column(name="CREATED_DATE",nullable = false )
@@ -44,5 +32,4 @@ public class DB_OWNER_INFO {
     private String UPDATED_BY;
     @Column(name="UPDATED_DATE",nullable = true )
     private Date UPDATED_DATE;
-
 }

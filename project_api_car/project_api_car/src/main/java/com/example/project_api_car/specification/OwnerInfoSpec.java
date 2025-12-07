@@ -9,9 +9,7 @@ public class OwnerInfoSpec {
         return (root, query, builder) -> {
             if(search==null) return builder.conjunction();
             return builder.or(
-                builder.like(root.get("DB_CODE"),"%"+search+"%"),
-                builder.like(root.get("TYPE"),"%"+search+"%"),
-                builder.like(root.get("USERNAME"),"%"+search+"%")
+                builder.like(root.get("DB_CODE"),"%"+search+"%")
             );
         };
     }

@@ -4,8 +4,17 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OwnerInfoDto extends IBaseDto{
-    public Long  Id;
+    private Long Id;
     private String Name;
     private String EnglishName;
-    private Boolean Status;
+    private String Phone;
+    private String Phone1;
+    private String Email;
+    private String Description;
+    private String FaceboolURL;
+    private String InURL;
+    private String InstagramURL;
+    private String YoutubeURL;
+    private String TelegramURL;
+    private String WorkingInfo;
 }
