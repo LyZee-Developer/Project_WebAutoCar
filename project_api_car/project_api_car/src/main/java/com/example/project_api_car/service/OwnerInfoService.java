@@ -15,4 +15,5 @@ public interface OwnerInfoService {
     OwnerInfoDto Update(OwnerInfoDataModel model);
     Boolean Delete(Long Id);
     Boolean IsExistedCar(Long CarId);
+    Boolean DeleteImage(Long imageId);
 }

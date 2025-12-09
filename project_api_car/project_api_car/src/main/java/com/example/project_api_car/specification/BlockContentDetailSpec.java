@@ -2,10 +2,10 @@ package com.example.project_api_car.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.example.project_api_car.entity.DB_BLOCK_CONTENT;
+import com.example.project_api_car.entity.DB_BLOCK_CONTENT_DEL;
 
-public class BlockContentSpec {
-    public static Specification<DB_BLOCK_CONTENT> Search(String search) {
+public class BlockContentDetailSpec {
+    public static Specification<DB_BLOCK_CONTENT_DEL> Search(String search) {
         return (root, query, builder) -> {
             if(search==null) return builder.conjunction();
             return builder.or(
@@ -15,7 +15,7 @@ public class BlockContentSpec {
             );
         };
     }
-    public static Specification<DB_BLOCK_CONTENT> OrderDir(String dir,String orderBy) {
+    public static Specification<DB_BLOCK_CONTENT_DEL> OrderDir(String dir,String orderBy) {
         return (root, query, builder) -> {
             query.orderBy(builder.desc(root.get("id")));
             if(orderBy==null || orderBy.isEmpty()) return builder.conjunction();

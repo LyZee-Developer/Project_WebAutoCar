@@ -17,4 +17,5 @@ public class OwnerInfoDto extends IBaseDto{
     private String YoutubeURL;
     private String TelegramURL;
     private String WorkingInfo;
+    private String PathImage;
 }

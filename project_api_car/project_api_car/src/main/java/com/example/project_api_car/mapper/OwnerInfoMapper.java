@@ -28,7 +28,7 @@ public class OwnerInfoMapper {
         data.setDB_CODE(GlobalHelper.Str.GlobalDatabase);
         return data;
     }
-    public  static OwnerInfoDto MaptoDto(DB_OWNER_INFO model,int recordCount){
+    public  static OwnerInfoDto MaptoDto(DB_OWNER_INFO model,int recordCount,String pathImage){
         var data = new OwnerInfoDto();
         data.setId(model.getID());
         data.setName(model.getNAME());
@@ -40,6 +40,7 @@ public class OwnerInfoMapper {
         data.setFaceboolURL(model.getFACEBOOK_URL());
         data.setDescription(model.getDESCRIPTION());
         data.setInstagramURL(model.getINSTAGRAM_URL());
+        data.setPathImage(pathImage);
         data.setInURL(model.getIN_URL());
         data.setWorkingInfo(model.getWORKING_INFO());
         data.setTelegramURL(model.getTELEGRAM_URL());

@@ -1,6 +1,7 @@
 package com.example.project_api_car.data_model.owner_info;
 
 import com.example.project_api_car.data_model.IBaseDataModel;
+import com.example.project_api_car.data_model.upload.UploadDataModel;
 
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -27,4 +28,5 @@ public class OwnerInfoDataModel extends  IBaseDataModel{
     private String TelegramURL;
     @Size(max = 255, message = "WorkingInfo cannot exceed 255 characters")
     private String WorkingInfo;
+    private UploadDataModel upload;
 }

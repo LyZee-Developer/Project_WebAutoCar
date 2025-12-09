@@ -26,10 +26,10 @@ public class BlockContentImplement implements  BlockContentService {
        
         if (filter.getStatus() != null) {
                 list = list.stream()
-                        .filter(s -> s.getSTATUS().equals(filter.getStatus()))
+                        .filter(s -> s.getStatus().equals(filter.getStatus()))
                         .collect(Collectors.toList());
         }
-        if(filter.getId() != null && filter.getId()>0) list = list.stream().filter(s->s.getID().equals(filter.getId())).collect(Collectors.toList());
+        if(filter.getId() != null && filter.getId()>0) list = list.stream().filter(s->s.getId().equals(filter.getId())).collect(Collectors.toList());
         var totalRecord = list.size();
          if(filter.getPage() !=null && filter.getRecord()!=null && filter.getPage()>0 && filter.getRecord()>0){
             list = list.stream().skip(filter.getPage()-1).limit(filter.getRecord()*filter.getPage()).collect(Collectors.toList());
@@ -48,17 +48,16 @@ public class BlockContentImplement implements  BlockContentService {
     @Override
     public BlockContentDto Update(BlockContentDataModel model){
         var data = blockContentRepository.findById(model.getId()).get();
-        data.setUPDATED_BY(GlobalHelper.Str.ADMIN);
-        data.setTITLE(model.getTitle());
-        data.setTITLE_EN(model.getTitleEnglish());
-        data.setSUB_TITLE(model.getSubTitle());
-        data.setSUB_TITLE_EN(model.getSubTitleEnglish());
-        data.setDESCRIPTION(model.getDescription());
-        data.setDESCRIPTION_EN(model.getDescriptionEnglish());
-        data.setTYPE(model.getType());
-        data.setSTATUS(model.getStatus());
-        data.setUPDATED_DATE(new Date());
-        data.setDB_CODE(GlobalHelper.Str.GlobalDatabase);
+        data.setUpdatedBy(GlobalHelper.Str.ADMIN);
+        data.setTitle(model.getTitle());
+        data.setTitleEnglish(model.getTitleEnglish());
+        data.setSubTitle(model.getSubTitle());
+        data.setSubTitleEnglish(model.getSubTitleEnglish());
+        data.setDescription(model.getDescription());
+        data.setDescriptionEnglish(model.getDescriptionEnglish());
+        data.setType(model.getType());
+        data.setStatus(model.getStatus());
+        data.setUpdatedDate(new Date());
         blockContentRepository.save(data);
         var result = BlockContentMapper.MaptoDto(data,1);
         return result;

@@ -45,4 +45,9 @@ public class OwnerInfoApiController {
         var result = ownerInfoController.Delete(Id);
         return new ResponseEntity<>(result.getBody(),result.getStatusCode());   
     }
+    @GetMapping(OwnerInfoHelper.URL.DeleteImage)
+    public ResponseEntity<?> DeleteImage(@RequestParam(value="imageId") Long Id){
+        var result = ownerInfoController.DeleteImage(Id);
+       return new ResponseEntity<>(result.getBody(),result.getStatusCode());
+    }
 }

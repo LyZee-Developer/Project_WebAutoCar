@@ -12,7 +12,6 @@ import com.example.project_api_car.controller.PartnerSupportController;
 import com.example.project_api_car.data_model.partner_support.PartnerSupportDataModel;
 import com.example.project_api_car.data_model.partner_support.PartnerSupportFilterDataModel;
 import com.example.project_api_car.helper.PartnerSupportHelper;
-import com.example.project_api_car.helper.UserHelper;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -46,7 +45,7 @@ public class PartnerSupportApiController {
         var result = partnerSupportController.Delete(Id);
         return new ResponseEntity<>(result.getBody(),result.getStatusCode());   
     }
-    @GetMapping(UserHelper.URL.DeleteImage)
+    @GetMapping(PartnerSupportHelper.URL.DeleteImage)
     public ResponseEntity<?> DeleteImage(@RequestParam(value="imageId") Long Id){
         var result = partnerSupportController.DeleteImage(Id);
        return new ResponseEntity<>(result.getBody(),result.getStatusCode());

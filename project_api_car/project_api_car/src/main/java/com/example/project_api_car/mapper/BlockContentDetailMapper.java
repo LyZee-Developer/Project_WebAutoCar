@@ -3,37 +3,32 @@ package com.example.project_api_car.mapper;
 
 import java.util.Date;
 
-import com.example.project_api_car.data_model.block_content.BlockContentDataModel;
-import com.example.project_api_car.dto.BlockContentDto;
-import com.example.project_api_car.entity.DB_BLOCK_CONTENT;
+import com.example.project_api_car.data_model.block_content_detail.BlockContentDetailDataModel;
+import com.example.project_api_car.dto.BlockContentDetailDto;
+import com.example.project_api_car.entity.DB_BLOCK_CONTENT_DEL;
 import com.example.project_api_car.helper.GlobalHelper;
 
-public class BlockContentMapper {
-    public  static DB_BLOCK_CONTENT MaptoEntity(BlockContentDataModel model){
-        var data = new DB_BLOCK_CONTENT();
+public class BlockContentDetailMapper {
+    public  static DB_BLOCK_CONTENT_DEL  MaptoEntity(BlockContentDetailDataModel model){
+        var data = new DB_BLOCK_CONTENT_DEL();
         data.setTitle(model.getTitle());
+        data.setBlockContentId(model.getBlockContentId());
         data.setTitleEnglish(model.getTitleEnglish());
-        data.setSubTitle(model.getSubTitle());
-        data.setSubTitleEnglish(model.getSubTitleEnglish());
         data.setDescription(model.getDescription());
         data.setDescriptionEnglish(model.getDescriptionEnglish());
-        data.setType(model.getType());
         data.setStatus(model.getStatus());
-        data.setCreatedBy(GlobalHelper.Str.ADMIN);
+        data.setCreatedBy(GlobalHelper.Str.ADMIN); 
         data.setCreatedDate(new Date());
         data.setDbCode(GlobalHelper.Str.GlobalDatabase);
         return data;
     }
-    public  static BlockContentDto MaptoDto(DB_BLOCK_CONTENT model,int recordCount){
-        var data = new BlockContentDto();
+    public  static BlockContentDetailDto MaptoDto(DB_BLOCK_CONTENT_DEL model,int recordCount){
+        var data = new BlockContentDetailDto();
         data.setId(model.getId());
         data.setTitle(model.getTitle());
         data.setTitleEnglish(model.getTitleEnglish());
-        data.setSubTitle(model.getSubTitle());
-        data.setSubTitleEnglish(model.getSubTitleEnglish());
         data.setDescription(model.getDescription());
         data.setDescriptionEnglish(model.getDescriptionEnglish());
-        data.setType(model.getType());
         data.setStatus(model.getStatus());
         data.setCreatedBy(model.getCreatedBy());
         data.setCreatedDate(model.getCreatedDate());

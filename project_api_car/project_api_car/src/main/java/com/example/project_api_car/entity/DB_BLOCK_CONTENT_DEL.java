@@ -12,29 +12,27 @@ import lombok.Setter;
 @Entity
 @Setter
 @Getter
-public class DB_BLOCK_CONTENT {
+public class DB_BLOCK_CONTENT_DEL {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long  id;
+    public Long  id;
+    private Long blockContentId;
      @Column(nullable = false)
     private String title;
     private String titleEnglish;
-    private String subTitle;
-    private String subTitleEnglish;
+    @Column(nullable = false)
     private String description;
     private String descriptionEnglish;
     @Column(nullable = false)
-    private String type;
-    @Column(nullable = false)
     private Boolean status;
-    @Column(length=100,name="CREATED_BY",nullable = false)
+    @Column(length=100,nullable = false)
     private String createdBy;
-    @Column(name="CREATED_DATE",nullable = false )
+    @Column(nullable = false )
     private Date createdDate;
-    @Column(length=50,name="DB_CODE")
+    @Column(length=50)
     private String dbCode;
-     @Column(name="UPDATED_BY",nullable = true )
+     @Column(nullable = true )
     private String updatedBy;
-    @Column(name="UPDATED_DATE",nullable = true )
+    @Column(nullable = true )
     private Date updatedDate;
 }

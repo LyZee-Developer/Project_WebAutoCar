@@ -32,6 +32,13 @@ public  class BlockContentController {
 
     public  ResponseEntity<?> Create(BlockContentDataModel model){
         try {
+            if(!BlockContentHelper.Type.Type.contains(model.getType())){
+                return new ResponseEntity<>(new ApiResponseHandler().SetDetail("Invalid type!"),HttpStatus.BAD_REQUEST);
+            }
+            var types = blockContentRepository.findByType(model.getType());
+            if(types.size()>0) {
+                return new ResponseEntity<>(new ApiResponseHandler().SetDetail("We have this content already!"),HttpStatus.BAD_REQUEST);
+            }
             var result = blockContentImplement.Create(model);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
@@ -40,10 +47,17 @@ public  class BlockContentController {
         }
     }
    
-    public  ResponseEntity<?> Update(BlockContentDataModel model){
+    public  ResponseEntity<?> Update(BlockContentDataModel model){ 
         try {
             if(Objects.isNull(model.getId()) || model.getId() <1) {
                 return new ResponseEntity<>(new ApiResponseHandler().SetDetail("Id is required!"),HttpStatus.BAD_REQUEST);
+            }
+            if(!BlockContentHelper.Type.Type.contains(model.getType())){
+                return new ResponseEntity<>(new ApiResponseHandler().SetDetail("Invalid type!"),HttpStatus.BAD_REQUEST);
+            }
+            var isExistedType = blockContentRepository.findByType(model.getType());
+            if(isExistedType!=null) {
+                return new ResponseEntity<>(new ApiResponseHandler().SetDetail("We have this content already!"),HttpStatus.BAD_REQUEST);
             }
             var isExisted = blockContentRepository.findById(model.getId());
             if(!isExisted.isPresent()) return  new ApiResponseHandler().SetDetail(BlockContentHelper.Message.NotFound,HttpStatus.BAD_REQUEST);

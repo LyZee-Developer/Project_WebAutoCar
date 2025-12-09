@@ -74,6 +74,11 @@ public class OwnerInfoController {
         var result = ownerInfoImplement.Delete(Id);
         return ResponseEntity.ok(result);
     }
+    public  ResponseEntity<?> DeleteImage(Long Id){
+         if(Id < 1 ) return new ApiResponseHandler().SetDetail("imageId is required!",HttpStatus.BAD_REQUEST);
+        var result = ownerInfoImplement.DeleteImage(Id);
+        return ResponseEntity.ok(result);
+    }
 
    
 }

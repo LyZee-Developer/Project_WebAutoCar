@@ -1,6 +1,9 @@
 package com.example.project_api_car.helper;
 
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.example.project_api_car.security.ApiResponseHandler;
 
 public class BlockContentHelper {
@@ -9,6 +12,9 @@ public class BlockContentHelper {
         public final static String Create="api/block_content/create";
         public final static String Update="api/block_content/update";
         public final static String Delete="api/block_content/delete";
+    }
+     public static class Type{
+        public final static List<String> Type = Arrays.asList("Header", "Footer","Body","Service");
     }
     public static class Message{
         public static final ApiResponseHandler NotFound = new ApiResponseHandler().SetDetail("Block content not found!");

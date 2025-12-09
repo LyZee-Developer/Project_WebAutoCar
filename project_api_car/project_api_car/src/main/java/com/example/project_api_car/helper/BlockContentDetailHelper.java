@@ -1,0 +1,16 @@
+package com.example.project_api_car.helper;
+
+
+import com.example.project_api_car.security.ApiResponseHandler;
+
+public class BlockContentDetailHelper {
+    public static class URL {
+        public final static String List="api/block_content_detail/list";
+        public final static String Create="api/block_content_detail/create";
+        public final static String Update="api/block_content_detail/update";
+        public final static String Delete="api/block_content_detail/delete";
+    }
+    public static class Message{
+        public static final ApiResponseHandler NotFound = new ApiResponseHandler().SetDetail("Block content detail not found!");
+    }
+}
