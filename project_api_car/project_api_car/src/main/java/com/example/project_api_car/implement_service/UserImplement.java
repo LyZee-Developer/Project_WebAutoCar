@@ -9,16 +9,21 @@ import org.springframework.stereotype.Service;
 import com.example.project_api_car.data_model.user.UserDataModel;
 import com.example.project_api_car.data_model.user.UserFilterDataModel;
 import com.example.project_api_car.dto.UserDto;
+import com.example.project_api_car.entity.DB_IMAGE;
+import com.example.project_api_car.helper.UserHelper;
 import com.example.project_api_car.mapper.UserMapper;
+import com.example.project_api_car.repository.ImageRepository;
 import com.example.project_api_car.repository.UserRepository;
 import com.example.project_api_car.service.UserService;
 import com.example.project_api_car.specification.UserSpec;
+import com.example.project_api_car.util.UploadImageHandler;
 
 import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @Service
 public class UserImplement implements  UserService {
     private final UserRepository  userRepository;
+    private final ImageRepository  imageRepository;
     @Override
     public List<UserDto> List(UserFilterDataModel filter){
         var list = userRepository.findAll(UserSpec.Search(filter.getSearch()).and(UserSpec.OrderDir(filter.getOrderDir(),filter.getOrderBy())));
@@ -32,20 +37,43 @@ public class UserImplement implements  UserService {
         if(filter.getPage() !=null && filter.getRecord()!=null && filter.getPage()>0 && filter.getRecord()>0){
             list = list.stream().skip(filter.getPage()-1).limit(filter.getRecord()*filter.getPage()).collect(Collectors.toList());
         }
-        return list.stream().map(s->UserMapper.MaptoDto(s,total)).collect(Collectors.toList());
+        return list.stream().map(s->{
+             var pathImage = "";
+            var img = imageRepository.findByRefIdAndType(s.getID(), UserHelper.FolderName.User.toUpperCase());
+            if(img!=null) pathImage = img.getHostImage()+"/"+img.getPathImage();
+            return UserMapper.MaptoDto(s,total,pathImage);
+        }).collect(Collectors.toList());
     }
 
     @Override
     public  UserDto  Create(UserDataModel model){
         var mapData = UserMapper.MaptoEntity(model);
         var data = userRepository.save(mapData);
-        var result = UserMapper.MaptoDto(data,1);
+        var image = new DB_IMAGE();
+        var PathImage = "";
+        if(model.getUpload()!=null){
+            var upload = new UploadImageHandler(UserHelper.FolderName.User);
+            var dto = upload.Upload(model.getUpload());
+            image.setHostImage(dto.getHostName());
+            image.setNameImage(dto.getFilename());
+            image.setSizeImage(dto.getSize());
+            image.setRefId(data.getID());
+            image.setType(UserHelper.FolderName.User.toUpperCase());
+            image.setTypeImage(dto.getType());
+            image.setPathImage(dto.getPathFilename());
+            imageRepository.save(image);
+            PathImage=image.getHostImage()+"/"+image.getPathImage();
+        }
+        var result = UserMapper.MaptoDto(data,1,PathImage);
         return result;
     }
 
     @Override
     public UserDto Update(UserDataModel model){
+        var image = imageRepository.findByRefIdAndType(model.getId(), UserHelper.FolderName.User);
         var data = userRepository.findById(model.getId()).get();
+        var upload = new UploadImageHandler(UserHelper.FolderName.User.toLowerCase());
+        var PathImage="";
         data.setNAME(model.getName());
         data.setNAME_EN(model.getEnglishName());
         data.setUPDATED_BY(model.getUsername());
@@ -57,7 +85,24 @@ public class UserImplement implements  UserService {
         data.setEMAIL(model.getEmail());
         data.setUPDATED_DATE(new Date());
         userRepository.save(data);
-        var result = UserMapper.MaptoDto(data,1);
+        if(model.getUpload()!=null){
+            if(image!=null) {
+                upload.DeleteImage(image.getNameImage());
+                imageRepository.delete(image);
+            }
+            var dto = upload.Upload(model.getUpload());
+            var newImg = new DB_IMAGE();
+            newImg.setHostImage(dto.getHostName());
+            newImg.setNameImage(dto.getFilename());
+            newImg.setSizeImage(dto.getSize());
+            newImg.setRefId(data.getID());
+            newImg.setType(UserHelper.FolderName.User);
+            newImg.setTypeImage(dto.getType());
+            newImg.setPathImage(dto.getPathFilename());
+            imageRepository.save(newImg);
+            PathImage=newImg.getHostImage()+"/"+newImg.getPathImage();
+        }
+        var result = UserMapper.MaptoDto(data,1,PathImage);
         return result;
     }
 
@@ -81,6 +126,17 @@ public class UserImplement implements  UserService {
     public Boolean IsExistedUserById(Long Id){
         var users = userRepository.findAll().stream().filter(s->s.getID().equals(Id)).collect(Collectors.toList());
         return  users.isEmpty();
+    }
+    @Override
+    public Boolean DeleteImage(Long imageId){
+        var upload = new UploadImageHandler(UserHelper.FolderName.User.toLowerCase());
+        var image = imageRepository.findById(imageId);
+        if(!image.isEmpty()){
+            upload.DeleteImage(image.get().getNameImage());
+            imageRepository.delete(image.get());
+            return true;
+        }
+        return false;
     }
     
 }

@@ -13,19 +13,19 @@ import lombok.Setter;
 public class DB_IMAGE {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long  ID;
+    private Long  id;
      @Column(nullable=false)
-    private Long REF_ID;
+    private Long refId;
      @Column(nullable=false)
-    private String TYPE;
+    private String type;
      @Column(nullable=false)
-    private String PATH_IMG;
-    private String HOST_IMG;
+    private String pathImage;
+    private String hostImage;
     @Column(nullable=false)
-    private String TYPE_IMG;
+    private String typeImage;
      @Column(nullable=false)
-    private Long SIZE_IMG;
+    private Long sizeImage;
      @Column(nullable=false)
-    private String NAME_IMG;
+    private String nameImage;
 
 }

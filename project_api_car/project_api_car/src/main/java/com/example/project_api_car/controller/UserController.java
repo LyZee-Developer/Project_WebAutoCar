@@ -85,4 +85,8 @@ public class UserController {
         var result = userImplement.CheckCode(Code,0L);
         return  ResponseEntity.ok(result);
     }
+    public ResponseEntity<?> DeleteImage(Long Id) {
+        var result = userImplement.DeleteImage(Id);
+        return  ResponseEntity.ok(result);
+    }
 }

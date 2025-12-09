@@ -14,4 +14,5 @@ public interface PartnerSupportService {
     PartnerSupportDto Create(PartnerSupportDataModel model);
     PartnerSupportDto Update(PartnerSupportDataModel model);
     Boolean Delete(Long Id);
+    Boolean DeleteImage(Long Id);
 }

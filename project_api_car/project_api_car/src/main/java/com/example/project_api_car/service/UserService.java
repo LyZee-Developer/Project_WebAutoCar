@@ -16,4 +16,5 @@ public interface UserService {
     Boolean CheckCode(String code,Long Id);
     Boolean Delete(Long Id);
     Boolean IsExistedUserById(Long Id);
+    Boolean DeleteImage(Long Id);
 }

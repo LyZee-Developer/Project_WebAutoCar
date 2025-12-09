@@ -8,4 +8,5 @@ public class PartnerSupportDto extends IBaseDto{
     private String Name;
     private String EnglishName;
     private Boolean Status;
+    private String PathImage;
 }

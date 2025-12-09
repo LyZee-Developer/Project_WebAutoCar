@@ -26,7 +26,7 @@ public class UploadImageHandler {
     private Environment environment;
     private String folderUpload;
     public UploadImageHandler(String FolderName) {
-        this.FolderName = FolderName;
+        this.FolderName = FolderName.toLowerCase();
         this.folderUpload = "upload/"+this.FolderName;
     }
     public UploadDto Upload(MultipartFile file) {

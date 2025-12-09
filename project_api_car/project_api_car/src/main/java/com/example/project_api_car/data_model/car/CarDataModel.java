@@ -1,6 +1,7 @@
 package com.example.project_api_car.data_model.car;
 
 import com.example.project_api_car.data_model.IBaseDataModel;
+import com.example.project_api_car.data_model.upload.UploadDataModel;
 
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -15,4 +16,5 @@ public class CarDataModel extends  IBaseDataModel{
     @Size(max = 50, message = "Name cannot exceed 50 characters")
     public String EnglishName;
     public Boolean Status;
+    private UploadDataModel upload;
 }

@@ -45,6 +45,11 @@ public class CarApiController {
         var result = carController.Delete(Id);
         return new ResponseEntity<>(result.getBody(),result.getStatusCode());   
     }
+    @GetMapping(CarHelper.URL.DeleteImage)
+    public ResponseEntity<?> DeleteImage(@RequestParam(value="imageId")  Long Id){
+        var result = carController.DeleteImage(Id);
+        return new ResponseEntity<>(result.getBody(),result.getStatusCode());   
+    }
     
    
 }

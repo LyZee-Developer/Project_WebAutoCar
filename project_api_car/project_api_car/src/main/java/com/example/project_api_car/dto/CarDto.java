@@ -7,5 +7,6 @@ public class CarDto extends IBaseDto{
     public Long  Id;
     private String Name;
     private String EnglishName;
+    private String PathImage;
     private Boolean Status;
 }

@@ -13,4 +13,5 @@ public class UserDto extends IBaseDto {
     private Boolean Status;
     private String Phone1;
     private Boolean Gender;
+    private String PathImage;
 }

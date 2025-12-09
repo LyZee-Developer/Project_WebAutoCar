@@ -23,7 +23,7 @@ public class UserMapper {
         data.setDB_CODE(model.getDatabase());
         return data;
     }
-    public  static UserDto MaptoDto(DB_USER model,int recordCount){
+    public  static UserDto MaptoDto(DB_USER model,int recordCount,String PathImage){
         var data = new UserDto();
         data.setId(model.getID());
         data.setName(model.getNAME());
@@ -34,6 +34,7 @@ public class UserMapper {
         data.setEmail(model.getEMAIL());
         data.setGender(model.getGENDER());
         data.setCode(model.getUSER_CODE());
+        data.setPathImage(PathImage);
         data.setRecordCount(recordCount);
         data.setCreatedBy(model.getCREATED_BY());
         data.setCreatedDate(model.getCREATED_DATE());

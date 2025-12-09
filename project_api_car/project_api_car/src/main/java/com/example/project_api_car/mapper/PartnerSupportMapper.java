@@ -19,7 +19,7 @@ public class PartnerSupportMapper {
         data.setDB_CODE(GlobalHelper.Str.GlobalDatabase);
         return data;
     }
-    public  static PartnerSupportDto MaptoDto(DB_PARTNER_SUPPORT model,int recordCount){
+    public  static PartnerSupportDto MaptoDto(DB_PARTNER_SUPPORT model,int recordCount,String pathImage){
         var data = new PartnerSupportDto();
         data.setId(model.getID());
         data.setName(model.getNAME());
@@ -27,6 +27,7 @@ public class PartnerSupportMapper {
         data.setEnglishName(model.getNAME_EN());
         data.setCreatedBy(model.getCREATED_BY());
         data.setCreatedDate(model.getCREATED_DATE());
+        data.setPathImage(pathImage);
         data.setRecordCount(recordCount);
         data.setDatabase(model.getDB_CODE());
         data.setUpdatedBy(model.getUPDATED_BY());

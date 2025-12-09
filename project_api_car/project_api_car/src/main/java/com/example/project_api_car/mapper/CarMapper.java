@@ -8,6 +8,8 @@ import com.example.project_api_car.dto.CarDto;
 import com.example.project_api_car.entity.DB_CAR;
 import com.example.project_api_car.helper.GlobalHelper;
 
+import lombok.AllArgsConstructor;
+@AllArgsConstructor
 public class CarMapper {
     public  static DB_CAR MaptoEntity(CarDataModel model){
         var data = new DB_CAR();
@@ -19,7 +21,7 @@ public class CarMapper {
         data.setDB_CODE(GlobalHelper.Str.GlobalDatabase);
         return data;
     }
-    public  static CarDto MaptoDto(DB_CAR model,int recordCount){
+    public  static CarDto MaptoDto(DB_CAR model,int recordCount,String PathImage){
         var data = new CarDto();
         data.setId(model.getID());
         data.setName(model.getNAME());
@@ -28,6 +30,7 @@ public class CarMapper {
         data.setCreatedBy(model.getCREATED_BY());
         data.setCreatedDate(model.getCREATED_DATE());
         data.setRecordCount(recordCount);
+        data.setPathImage(PathImage);
         data.setDatabase(model.getDB_CODE());
         data.setUpdatedBy(model.getUPDATED_BY());
         data.setUpdatedDate(model.getUPDATED_DATE());

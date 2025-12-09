@@ -49,4 +49,9 @@ public class UserApiController {
         var result = userControllers.CheckCode(Code);
        return new ResponseEntity<>(result.getBody(),result.getStatusCode());
     }
+    @GetMapping(UserHelper.URL.DeleteImage)
+    public ResponseEntity<?> DeleteImage(@RequestParam(value="imageId") Long Id){
+        var result = userControllers.DeleteImage(Id);
+       return new ResponseEntity<>(result.getBody(),result.getStatusCode());
+    }
 }
