@@ -5,9 +5,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 import org.hibernate.cfg.Environment;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.project_api_car.config.PortReader;
@@ -29,6 +32,7 @@ public class UploadImageHandler {
         this.FolderName = FolderName.toLowerCase();
         this.folderUpload = "upload/"+this.FolderName;
     }
+    @Async
     public UploadDto Upload(MultipartFile file) {
         try {
             var dto = new UploadDto();
@@ -53,7 +57,7 @@ public class UploadImageHandler {
             throw new RuntimeException("Failed to upload file: " + e.getMessage());
         }
     }
-
+    @Async
     public UploadDto Upload(UploadDataModel model) {
         try {
             var dto = new UploadDto();
@@ -75,6 +79,35 @@ public class UploadImageHandler {
             dto.setSize(model.getSize());
             return dto;
 
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload file: " + e.getMessage());
+        }
+    }
+    @Async
+    public List<UploadDto> Upload(List<UploadDataModel> model) {
+        try {
+            var multiDto = new ArrayList<UploadDto>();
+            for(UploadDataModel upload : model){
+                var dto = new UploadDto();
+                byte[] fileBytes = Base64.getDecoder().decode(upload.getBase64Text());
+                var folderPath = GlobalHelper.Path.upload + "\\" + this.FolderName;
+                // Create folder if not exists
+                Path uploadPath = Paths.get(folderPath);
+                if (!Files.exists(uploadPath))
+                    Files.createDirectories(uploadPath);
+                // Create storage path
+                String fileName = System.currentTimeMillis() + "_" + upload.getName().replace(" ", "_")+"."+upload.getTypeImage();
+                Path filePath = uploadPath.resolve(fileName);
+                // Save file
+                Files.write(filePath, fileBytes);
+                dto.setFilename(fileName);
+                dto.setHostName("localhost:8989");
+                dto.setPathFilename(this.folderUpload+"/"+fileName);
+                dto.setType(upload.getTypeImage());
+                dto.setSize(upload.getSize());
+                multiDto.add(dto);
+            }
+            return multiDto;
         } catch (IOException e) {
             throw new RuntimeException("Failed to upload file: " + e.getMessage());
         }
