@@ -8,4 +8,5 @@ import lombok.Setter;
 @Getter
 public class BlockContentDetailFilterDataModel extends IBaseFilterDataModel  {
     private Boolean Status;
+    private Long ContentBlockId;
 }
