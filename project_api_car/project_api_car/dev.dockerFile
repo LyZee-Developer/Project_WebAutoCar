@@ -1,14 +1,25 @@
-# Use a base image with Java installed
-FROM openjdk:21-jdk-alpine
+# =========================
+# Stage 1: Build the app
+# =========================
+FROM maven:3.9.9-eclipse-temurin-21 AS build
 
-# Define an argument for the JAR file path
-ARG JAR_FILE=target/*.jar
+WORKDIR /app
 
-# Copy the JAR file from the host (or previous build stage) into the container
-COPY ${JAR_FILE} app.jar
+COPY pom.xml .
+COPY src ./src
 
-# Expose the default Spring Boot port
-EXPOSE 90
+RUN mvn clean package -DskipTests
 
-# Set the entry point command to run the application
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+
+# =========================
+# Stage 2: Run the app
+# =========================
+FROM eclipse-temurin:21-jdk-alpine
+
+WORKDIR /app
+
+COPY --from=build /app/target/*.jar app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
